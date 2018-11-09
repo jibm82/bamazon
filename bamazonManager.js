@@ -107,55 +107,59 @@ let actions = {
   },
 
   addNewProduct: () => {
-    inquirer.prompt([
-      {
-        name: "product_name",
-        message: "What's the name of the product?",
-        validate: (product_name) => {
-          if (product_name.length) {
-            return true;
-          } else {
-            return "The name is required";
-          }
-        },
-        filter: (product_name) => { return product_name.trim(); }
-      },
-      {
-        name: "department_name",
-        message: "What's the name of the department?",
-        validate: (department_name) => {
-          if (department_name.length) {
-            return true;
-          } else {
-            return "The department is required";
-          }
-        },
-        filter: (department_name) => { return department_name.trim(); }
-      },
-      {
-        name: "price",
-        message: "What's the price?",
-        validate: (price) => {
-          if (price.match(/^[1-9][0-9]*(\.\d{1,2})?$/)) {
-            return true;
-          } else {
-            return "Please write a valid price";
-          }
-        }
-      },
-      {
-        name: "stock_quantity",
-        message: "What's initial stock?",
-        validate: (stock_quantity) => {
-          if (stock_quantity.match(/^[1-9][0-9]*$/)) {
-            return true;
-          } else {
-            return "Please write a valid quantity";
-          }
-        }
+    let query = `SELECT department_id as value, department_name as name
+                 FROM departments
+                 ORDER BY department_name`;
+
+    connection.query(query, (err, departments) => {
+      if (err) {
+        return console.log("Error", err);
       }
-    ]).then(product => {
-      actions.insertProduct(product);
+
+      inquirer.prompt([
+        {
+          name: "product_name",
+          message: "What's the name of the product?",
+          validate: (product_name) => {
+            if (product_name.length) {
+              return true;
+            } else {
+              return "The name is required";
+            }
+          },
+          filter: (product_name) => { return product_name.trim(); }
+        },
+        {
+          type: "list",
+          name: "department_id",
+          message: "Select a department",
+          choices: departments
+        },
+        {
+          name: "price",
+          message: "What's the price?",
+          validate: (price) => {
+            if (price.match(/^[1-9][0-9]*(\.\d{1,2})?$/)) {
+              return true;
+            } else {
+              return "Please write a valid price";
+            }
+          }
+        },
+        {
+          name: "stock_quantity",
+          message: "What's initial stock?",
+          validate: (stock_quantity) => {
+            if (stock_quantity.match(/^[1-9][0-9]*$/)) {
+              return true;
+            } else {
+              return "Please write a valid quantity";
+            }
+          }
+        }
+      ]).then(product => {
+        actions.insertProduct(product);
+      });
     });
   },
   insertProduct: (product) => {
