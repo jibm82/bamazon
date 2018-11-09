@@ -1,27 +1,6 @@
-require('dotenv').config();
-
-const mysql = require("mysql");
 const inquirer = require("inquirer");
-const Table = require("cli-table3");
-
-let connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
-});
-
-function displayTable(fields, results) {
-  let table = new Table({
-    head: fields.map((field) => { return field.name })
-  });
-
-  results.forEach((result) => {
-    table.push(Object.values(result));
-  })
-
-  console.log(table.toString());
-}
+let connection = require("./bamazon/connection");
+let displayTable = require("./bamazon/displayTable");
 
 function displayProducts() {
   connection.query("SELECT * FROM products", (err, results, fields) => {
