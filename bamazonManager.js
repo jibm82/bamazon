@@ -1,3 +1,4 @@
+const CFonts = require('cfonts');
 const connection = require("./bamazon/connection");
 const displayProducts = require("./bamazon/displayProducts");
 const displayTable = require("./bamazon/displayTable");
@@ -181,4 +182,5 @@ let actions = {
   }
 };
 
+CFonts.say('Bamazon');
 showMenu();

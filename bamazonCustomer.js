@@ -1,3 +1,4 @@
+const CFonts = require('cfonts');
 const connection = require("./bamazon/connection");
 const displayProducts = require("./bamazon/displayProducts");
 const inquirer = require("inquirer");
@@ -78,4 +79,5 @@ function displayTotalCost(product, quantity, total) {
   ]);
 }
 
+CFonts.say('Bamazon');
 displayProducts(connection, showPurchaseMenu);
