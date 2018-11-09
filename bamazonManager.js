@@ -42,7 +42,11 @@ let actions = {
   },
 
   viewLowInventory: () => {
-    let query = "SELECT * FROM products WHERE stock_quantity < ?";
+    let query = `SELECT a.item_id, a.product_name, b.department_name,
+               a.price, a.stock_quantity
+               FROM products a INNER JOIN departments b
+               ON a.department_id = b.department_id
+               WHERE stock_quantity < ?`;
 
     connection.query(query, LOW_INVENTORY_FACTOR, (err, results, fields) => {
       if (err) {
