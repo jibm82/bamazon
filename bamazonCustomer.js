@@ -1,17 +1,6 @@
 const inquirer = require("inquirer");
 let connection = require("./bamazon/connection");
-let displayTable = require("./bamazon/displayTable");
-
-function displayProducts() {
-  connection.query("SELECT * FROM products", (err, results, fields) => {
-    if (err) {
-      return console.log("Error", err);
-    }
-
-    displayTable(fields, results);
-    showPurchaseMenu(results);
-  });
-}
+let displayProducts = require("./bamazon/displayProducts");
 
 function validateItemId(item_id, products) {
   return products.some((product) => { return product.item_id == item_id });
@@ -81,5 +70,5 @@ function displayTotalCost(product, quantity) {
   console.log("Thanks for shopping with us");
 }
 
-displayProducts();
+displayProducts(connection, showPurchaseMenu);
 
