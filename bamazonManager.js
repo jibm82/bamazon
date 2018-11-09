@@ -1,8 +1,10 @@
+const connection = require("./bamazon/connection");
+const displayProducts = require("./bamazon/displayProducts");
+const displayTable = require("./bamazon/displayTable");
 const inquirer = require("inquirer");
+const printMessage = require("print-message");
+
 const LOW_INVENTORY_FACTOR = 5;
-let connection = require("./bamazon/connection");
-let displayTable = require("./bamazon/displayTable");
-let displayProducts = require("./bamazon/displayProducts");
 
 function showMenu() {
   inquirer.prompt({
@@ -56,7 +58,7 @@ let actions = {
       if (results.length) {
         displayTable(fields, results);
       } else {
-        console.log("There are no products with low inventory");
+        printMessage(["There are no products with low inventory"]);
       }
       showMenu();
     });
@@ -100,7 +102,7 @@ let actions = {
         return console.log("Error", err);
       }
 
-      console.log(`${product.product_name} increased by ${quantity}`);
+      printMessage([`${product.product_name} increased by ${quantity}`]);
 
       showMenu();
     });
@@ -168,7 +170,7 @@ let actions = {
         return console.log("Error", err);
       }
 
-      console.log(`${product.product_name} added to products`);
+      printMessage([`${product.product_name} added to products`]);
 
       showMenu();
     });

@@ -1,6 +1,7 @@
+const connection = require("./bamazon/connection");
+const displayTable = require("./bamazon/displayTable");
 const inquirer = require("inquirer");
-let connection = require("./bamazon/connection");
-let displayTable = require("./bamazon/displayTable");
+const printMessage = require("print-message");
 
 function showMenu() {
   inquirer.prompt({
@@ -43,7 +44,7 @@ let actions = {
       if (results.length) {
         displayTable(fields, results);
       } else {
-        console.log("There are no departments");
+        printMessage(["There are no departments"]);
       }
       showMenu();
     });
@@ -84,7 +85,7 @@ let actions = {
         return console.log("Error", err);
       }
 
-      console.log(`${department.department_name} added to departments`);
+      printMessage([`${department.department_name} added to departments`]);
 
       showMenu();
     });

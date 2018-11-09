@@ -1,6 +1,7 @@
+const connection = require("./bamazon/connection");
+const displayProducts = require("./bamazon/displayProducts");
 const inquirer = require("inquirer");
-let connection = require("./bamazon/connection");
-let displayProducts = require("./bamazon/displayProducts");
+const printMessage = require("print-message");
 
 function validateItemId(item_id, products) {
   return products.some((product) => { return product.item_id == item_id });
@@ -70,10 +71,11 @@ function persistPurchase(product, quantity) {
 function displayTotalCost(product, quantity, total) {
   let formattedTotal = Intl.NumberFormat().format(total)
 
-  console.log(`You purchased ${quantity} - ${product.product_name}`);
-  console.log(`Your total is $${formattedTotal}`);
-  console.log("Thanks for shopping with us");
+  printMessage([
+    `You purchased ${quantity} - ${product.product_name}`,
+    `Your total is $${formattedTotal}`,
+    "Thanks for shopping with us"
+  ]);
 }
 
 displayProducts(connection, showPurchaseMenu);
-
