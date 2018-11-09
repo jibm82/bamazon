@@ -50,21 +50,26 @@ function showPurchaseMenu(products) {
 }
 
 function persistPurchase(product, quantity) {
-  let query = "UPDATE products SET stock_quantity = (stock_quantity - ?) WHERE item_id = ?";
-  let params = [quantity, product.item_id];
+  let total = parseFloat(product.price * quantity).toFixed(2);
+  let query = `UPDATE products
+               SET stock_quantity = (stock_quantity - ?),
+               product_sales = (product_sales + ?)
+               WHERE item_id = ?`;
+  let params = [quantity, total, product.item_id];
+
   connection.query(query, params, (err) => {
     if (err) {
       return console.log("Error", err);
     }
 
-    displayTotalCost(product, quantity);
+    displayTotalCost(product, quantity, total);
     connection.end();
   });
 }
 
-function displayTotalCost(product, quantity) {
-  let total = parseFloat(product.price * quantity).toFixed(2);
+function displayTotalCost(product, quantity, total) {
   let formattedTotal = Intl.NumberFormat().format(total)
+
   console.log(`You purchased ${quantity} - ${product.product_name}`);
   console.log(`Your total is $${formattedTotal}`);
   console.log("Thanks for shopping with us");
